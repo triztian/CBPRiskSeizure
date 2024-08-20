@@ -27,7 +27,9 @@ def remove_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def add_trading_partner_columns(df: pd.DataFrame, columns: List[str]) -> pd.DataFrame:
+def add_trading_partner_columns(
+    df: pd.DataFrame, columns: List[str], trading_partner_dropped: str
+) -> pd.DataFrame:
     """
     Adds the "dummy" columns for trading partners, these must be
     based on the same columns from the model training features
@@ -41,6 +43,12 @@ def add_trading_partner_columns(df: pd.DataFrame, columns: List[str]) -> pd.Data
             dft[xcolumn] = 0
 
         dfs.append(dft)
+
+    dummy = df.copy()
+    for column in columns:
+        dummy[column] = 0
+
+    dfs.append(dummy)
 
     return pd.concat(dfs)
 
@@ -69,6 +77,7 @@ def add_line_count_columns(
 def transform(
     df: pd.DataFrame,
     trading_partner_columns: Iterable[str],
+    trading_partner_dropped: str,
     line_count_values: Iterable[int],
     copy=True,
 ) -> pd.DataFrame:
@@ -81,7 +90,11 @@ def transform(
 
     return (
         target.pipe(remove_columns)
-        .pipe(add_trading_partner_columns, trading_partner_columns)
+        .pipe(
+            add_trading_partner_columns,
+            trading_partner_columns,
+            trading_partner_dropped,
+        )
         .pipe(rename_columns)
         .pipe(add_line_count_columns, line_count_values)
     )
