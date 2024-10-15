@@ -1,8 +1,13 @@
 # IPR Seiure Likelyness
 
-This readme describes the organization of this project and the usage of the various file.
+A data pipeline for training an ML model that help determine the risk of CBP seizing products imported into the US primarily for apparel products based on their trading partner of origin.
 
-# Files and Directories overview
+## Overview 
+
+  * We use a one-class SVM classifier given that our data set has only the class which we wish to avoid ("seized")
+  * We pre-process the data in stages to be better suited for training; processing includes extending it
+
+## Files Overview
 
   * `data/raw` -> Original raw downloaded data sets and the synthetic 100 product catalog (derived from the myntra dataset)
   * `data/processed` -> Muliple data sets created accross various notebooks
@@ -27,3 +32,8 @@ This readme describes the organization of this project and the usage of the vari
 ```shell
 python -m unittest discover
 ```
+
+## Data Sources
+
+  * Myntra Apparel Dataset: https://www.kaggle.com/datasets/ronakbokaria/myntra-products-dataset
+  * CBP Data Portal Seizures: https://www.cbp.gov/document/stats/ipr-seizures
